@@ -14,6 +14,9 @@
 	"support": {
 		"issues": "https://github.com/briceburg/silverstripe-holderpage/issues"
 	},
+	"require": {
+    "silverstripe/framework": "~3.0"
+  },
 	"extra": {
 		"installer-name": "holderpage",
 		"screenshots": [
