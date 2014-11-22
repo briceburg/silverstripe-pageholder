@@ -38,8 +38,8 @@ Convenience wrapper around [ExcludeChildren Module](https://github.com/micschk/s
 and [Versioned GridField Module](https://github.com/icecaster/silverstripe-versioned-gridfield)
 
 
-Screenshots;
-###overview
+##Screenshots
+
 ![overview](https://github.com/briceburg/silverstripe-holderpage/blob/master/docs/screenshots/holderpage.png?raw=true)
-###link button search [via GridFieldExtensions]
-![editing](http://github.com/briceburg/silverstripe-holderpage/blob/master/docs/screenshots/holderpage_edit.png?raw=true)
+
+![editing](https://github.com/briceburg/silverstripe-holderpage/blob/master/docs/screenshots/holderpage_edit.png?raw=true)

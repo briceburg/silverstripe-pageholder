@@ -1,0 +1,24 @@
+{
+	"name": "briceburg/silverstripe-holderpage",
+	"description": "Hide subpages / children from the CMS sitetree and allow management through a Versioned GridField. Think _BlogHolder_ but flexible and for any page type.",
+	"type": "silverstripe-module",
+	"homepage": "https://github.com/briceburg/silverstripe-holderpage",
+	"keywords": ["silverstripe", "sitetree", "versioned", "gridfield", "subpages", "children", "hide", "manage", "cms"],
+	"license": "BSD-3-Clause",
+	"authors": [
+		{
+			"name": "Brice Burgess",
+			"email": "briceburg@gmail.com"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/briceburg/silverstripe-holderpage/issues"
+	},
+	"extra": {
+		"installer-name": "holderpage",
+		"screenshots": [
+			"docs/screenshots/holderpage.png",
+			"docs/screenshots/holderpage_edit.png"
+		]
+	}
+}
