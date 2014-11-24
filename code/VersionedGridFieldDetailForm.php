@@ -2,7 +2,7 @@
 /**
  * VersionedGridFieldDetailForm & VersionedGridFieldDetailForm_ItemRequest
  * Allows managing versioned objects through gridfield.
- * See README for details 
+ * See README for details
  *
  * @author Tim Klein, Dodat Ltd <tim[at]dodat[dot]co[dot]nz>
  */
@@ -20,7 +20,7 @@ class VersionedGridFieldDetailForm extends GridFieldDetailForm {
 		if(is_numeric($request->param('ID'))) {
 			$record = $list->byId($request->param("ID"));
 		} else {
-			$record = Object::create($gridField->getModelClass());	
+			$record = Object::create($gridField->getModelClass());
 		}
 
 		$class = $this->getItemRequestClass();
@@ -36,7 +36,7 @@ class VersionedGridFieldDetailForm extends GridFieldDetailForm {
 
 		return $handler->handleRequest($request, DataModel::inst());
 	}
-	
+
 }
 
 class VersionedGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemRequest {
@@ -46,7 +46,7 @@ class VersionedGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemR
 		'view',
 		'ItemEditForm'
 	);
-	
+
 	function isNew() {
 		/**
 		 * This check was a problem for a self-hosted site, and may indicate a
@@ -153,7 +153,7 @@ class VersionedGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemR
 						->setAttribute('data-icon', 'decline')->setUseButtonTag(true)
 				);
 			}
-		
+
 			// "save"
 			$minorActions->push(
 				FormAction::create('doSave',_t('CMSMain.SAVEDRAFT','Save Draft'))->setAttribute('data-icon', 'addpage')->setUseButtonTag(true)
@@ -172,13 +172,13 @@ class VersionedGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemR
 		  //Ensure Link method is defined & non-null before allowing preview
 		  if(method_exists($this->record, 'Link') && $this->record->Link()){
 			$actions->push(
-				LiteralField::create("preview", 
+				LiteralField::create("preview",
 					sprintf("<a href=\"%s\" class=\"ss-ui-button\" data-icon=\"preview\" target=\"_blank\">%s &raquo;</a>",
 						$this->record->Link()."?stage=Stage",
 						_t('LeftAndMain.PreviewButton', 'Preview')
 					)
 				)
-			);	
+			);
 		}
 		}
 
@@ -190,6 +190,18 @@ class VersionedGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemR
 	public function ItemEditForm() {
 		$form = parent::ItemEditForm();
 		$actions = $this->getCMSActions();
+
+		if(!$this->record->exists() && $this->record->is_a('SiteTree')) {
+		    $parent_page = $this->getController()->currentPage();
+		    if($parent_page && $parent_page->exists()) {
+
+		      $this->record->ParentID = $parent_page->ID;
+
+		      // update URLSegment @TODO perhaps more efficiently?
+		      $field = $this->record->getCMSFields()->dataFieldByName('URLSegment');
+		      $form->Fields()->replaceField('URLSegment',$field);
+		    }
+		}
 
 		$form->setActions($actions);
 		return $form;
@@ -220,7 +232,7 @@ class VersionedGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemR
 			$this->record->singular_name(),
 			'"'.Convert::raw2xml($this->record->Title).'"'
 		);
-		
+
 		$form->sessionMessage($message, 'good');
 		return $this->edit(Controller::curr()->getRequest());
 	}
@@ -246,7 +258,7 @@ class VersionedGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemR
 		$form->sessionMessage($message, 'good');
 		return $this->edit(Controller::curr()->getRequest());
 	}
-	
+
 
 	function doRollback($data, $form) {
 		$record = $this->record;
@@ -255,7 +267,7 @@ class VersionedGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemR
 		$record->publish("Live", "Stage", false);
 		//$record->writeWithoutVersion();
 		$message = "Cancelled Draft changes for \"".Convert::raw2xml($record->Title)."\"";
-		
+
 		$form->sessionMessage($message, 'good');
 		return Controller::curr()->redirect($this->Link('edit'));
 	}
@@ -310,16 +322,16 @@ class VersionedGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemR
 			DB::query("INSERT INTO \"{$this->baseTable()}\" (\"ID\") VALUES ($this->ID)");
 			if(method_exists($conn, 'allowPrimaryKeyEditing')) $conn->allowPrimaryKeyEditing($record->class, false);
 		}
-		
+
 		$oldStage = Versioned::current_stage();
 		Versioned::reading_stage('Stage');
 		$record->forceChange();
 		$record->write();
-		
+
 		$result = DataObject::get_by_id($this->class, $this->ID);
-		
+
 		Versioned::reading_stage($oldStage);
-		
+
 		return $result;
 	}
 
@@ -340,19 +352,19 @@ class VersionedGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemR
 	 * Compares current draft with live version,
 	 * and returns TRUE if no draft version of this page exists,
 	 * but the page is still published (after triggering "Delete from draft site" in the CMS).
-	 * 
+	 *
 	 * @return boolean
 	 */
 	function getIsDeletedFromStage() {
 		//if(!$this->record->ID) return true;
 		if($this->isNew()) return false;
-		
+
 		$stageVersion = Versioned::get_versionnumber_by_stage($this->record->class, 'Stage', $this->record->ID);
 
 		// Return true for both completely deleted pages and for pages just deleted from stage.
 		return !($stageVersion);
 	}
-	
+
 	/**
 	 * Return true if this page exists on the live site
 	 */
@@ -364,35 +376,35 @@ class VersionedGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemR
 	 * Compares current draft with live version,
 	 * and returns TRUE if these versions differ,
 	 * meaning there have been unpublished changes to the draft site.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function getIsModifiedOnStage() {
 		// new unsaved pages could be never be published
 		if($this->isNew()) return false;
-		
+
 		$stageVersion = Versioned::get_versionnumber_by_stage($this->record->class, 'Stage', $this->record->ID);
 		$liveVersion =	Versioned::get_versionnumber_by_stage($this->record->class, 'Live', $this->record->ID);
 
 		return ($stageVersion && $stageVersion != $liveVersion);
 	}
-	
+
 	/**
 	 * Compares current draft with live version,
 	 * and returns true if no live version exists,
 	 * meaning the page was never published.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function getIsAddedToStage() {
 		// new unsaved pages could be never be published
 		if($this->isNew()) return false;
-		
+
 		$stageVersion = Versioned::get_versionnumber_by_stage($this->record->class, 'Stage', $this->record->ID);
 		$liveVersion =	Versioned::get_versionnumber_by_stage($this->record->class, 'Live', $this->record->ID);
 
 		return ($stageVersion && !$liveVersion);
 	}
-	
+
 
 }
