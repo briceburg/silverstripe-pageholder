@@ -1,6 +1,4 @@
 <?php
-
-
 // from # ExcludeChildren Module
 class PageHolderExtension extends Hierarchy
 {
@@ -22,7 +20,7 @@ class PageHolderExtension extends Hierarchy
 
         foreach ($this->owner->config()->get("child_page_classes") as $class => $title) {
             $children = $class::get()->filter('ParentID', $this->owner->ID);
-            $fields->addFieldToTab('Root.Main', new VersionedGridField($class, $title, $children), 'Metadata');
+            $fields->addFieldToTab('Root.Main', new VersionedGridField($class, $title, $children));
         }
     }
 
@@ -39,9 +37,7 @@ class PageHolderExtension extends Hierarchy
         return $this->hiddenChildren;
     }
 
-    public function stageChildren($showAll = false)
-    {
-        $staged = parent::stageChildren($showAll);
+    public function getFilteredChildren($staged) {
         $action = Controller::curr()->getAction();
         if (in_array($action, array(
             'treeview',
@@ -49,19 +45,18 @@ class PageHolderExtension extends Hierarchy
         ))) {
             $staged = $staged->exclude('ClassName', $this->getExcludedClasses());
         }
-        return $staged;
+        return $staged->sort('Created','desc');
+    }
+
+    public function stageChildren($showAll = false)
+    {
+        $staged = parent::stageChildren($showAll);
+        return $this->getFilteredChildren($staged);
     }
 
     public function liveChildren($showAll = false, $onlyDeletedFromStage = false)
     {
         $staged = parent::liveChildren($showAll, $onlyDeletedFromStage);
-        $action = Controller::curr()->getAction();
-        if (in_array($action, array(
-            'treeview',
-            'getsubtree'
-        ))) {
-            $staged = $staged->exclude('ClassName', $this->getExcludedClasses());
-        }
-        return $staged;
+        return $this->getFilteredChildren($staged);
     }
 }
