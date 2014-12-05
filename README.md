@@ -22,9 +22,9 @@ Tested in SilverStripe 3.0, 3.1
 Screenshots
 -----------
 
-![overview](https://github.com/briceburg/silverstripe-holderpage/blob/master/docs/screenshots/holderpage.png?raw=true)
+![overview](https://github.com/briceburg/silverstripe-pageholder/blob/master/docs/screenshots/pageholder.png?raw=true)
 
-![editing](https://github.com/briceburg/silverstripe-holderpage/blob/master/docs/screenshots/holderpage_edit.png?raw=true)
+![editing](https://github.com/briceburg/silverstripe-pageholder/blob/master/docs/screenshots/pageholder_edit.png?raw=true)
 
 
 
