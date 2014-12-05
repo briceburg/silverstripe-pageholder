@@ -4,10 +4,12 @@
  * Allows managing versioned objects through gridfield.
  * See README for details
  *
+ * Enhanced for pageholder
+ *
  * @author Tim Klein, Dodat Ltd <tim[at]dodat[dot]co[dot]nz>
  */
 
-class VersionedGridFieldDetailForm extends GridFieldDetailForm {
+class PageHolderGridFieldDetailForm extends GridFieldDetailForm {
 
 	public function handleItem($gridField, $request) {
 		$controller = $gridField->getForm()->Controller();
@@ -39,7 +41,7 @@ class VersionedGridFieldDetailForm extends GridFieldDetailForm {
 
 }
 
-class VersionedGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemRequest {
+class PageHolderGridFieldDetailForm_ItemRequest extends GridFieldDetailForm_ItemRequest {
 
 	private static $allowed_actions = array(
 		'edit',

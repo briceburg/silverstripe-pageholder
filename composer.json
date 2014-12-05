@@ -1,8 +1,8 @@
 {
-	"name": "briceburg/silverstripe-holderpage",
-	"description": "Hide subpages / children from the CMS sitetree and allow management through a Versioned GridField. Think _BlogHolder_ but flexible and for any page type.",
+	"name": "briceburg/silverstripe-pageholder",
+	"description": "Hide children from the CMS sitetree and allow management through a Versioned GridField. Think _BlogHolder_ but flexible and for any page type.",
 	"type": "silverstripe-module",
-	"homepage": "https://github.com/briceburg/silverstripe-holderpage",
+	"homepage": "https://github.com/briceburg/silverstripe-pageholder",
 	"keywords": ["silverstripe", "sitetree", "versioned", "gridfield", "subpages", "children", "hide", "manage", "cms"],
 	"license": "BSD-3-Clause",
 	"authors": [
@@ -12,16 +12,17 @@
 		}
 	],
 	"support": {
-		"issues": "https://github.com/briceburg/silverstripe-holderpage/issues"
+		"issues": "https://github.com/briceburg/silverstripe-pageholder/issues"
 	},
 	"require": {
-    "silverstripe/framework": "~3.0"
+    "silverstripe/framework": "~3.0",
+    "micschk/silverstripe-excludechildren": "*"
   },
 	"extra": {
-		"installer-name": "holderpage",
+		"installer-name": "pageholder",
 		"screenshots": [
-			"docs/screenshots/holderpage.png",
-			"docs/screenshots/holderpage_edit.png"
+			"docs/screenshots/pageholder.png",
+			"docs/screenshots/pageholder_edit.png"
 		]
 	}
 }
